@@ -1,0 +1,21 @@
+[package]
+name = "imagecode"
+version = "0.1.0"
+authors = ["Philipp Hansch <dev@phansch.net>"]
+edition = "2018"
+
+[dependencies]
+qrcode = "=0.10.0"
+image = "0.21.0"
+tide = { git = "https://github.com/rustasync/tide.git", branch = "master" }
+tide-log = { git = "https://github.com/rustasync/tide.git", branch = "master" }
+mime = "0.3.13"
+
+log = "0.4.6"
+env_logger = "0.6.2"
+
+[patch.crates-io]
+tide = { git = "https://github.com/rustasync/tide.git", branch = "master" }
+http-service = { git = "https://github.com/rustasync/http-service", branch = "master" }
+http-service-hyper = { git = "https://github.com/rustasync/http-service", branch = "master" }
+http-service-mock = { git = "https://github.com/rustasync/http-service", branch = "master" }

@@ -1,0 +1,10 @@
+---
+language: rust
+cache: cargo
+
+rust: nightly
+
+script:
+  - rustc -vV
+  - cargo test --all -- --nocapture
+  - cargo build
