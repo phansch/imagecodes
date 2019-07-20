@@ -6,13 +6,13 @@
 
 use qrcode::{QrCode, Version, EcLevel};
 use qrcode::render::svg;
-use image::Luma;
+use image::{ColorType, Luma};
 
 use tide::{self, http, EndpointResult};
 use tide::querystring::ContextExt;
 use std::collections::HashMap;
 
-// TODO: png files, share query parsing
+// TODO: share query parsing
 // TODO: Abstract from web server as much as possible
 // What would be needed to launch a product that has chances of success?
 // * API docs
@@ -42,14 +42,24 @@ fn gen_svg(value: String, size: u32) -> String {
         .build()
 }
 
-fn gen_png(value: String, size: u32) {
+fn gen_png_buf(value: String, size: u32) -> Vec<u8> {
     let code = QrCode::with_version(value, Version::Normal(3), EcLevel::L).unwrap();
-    let image = code
-        .render::<Luma<u8>>()
+    let image = code.render::<Luma<u8>>()
         .min_dimensions(size, size)
         .quiet_zone(false)
         .build();
-    image.save("qrcode.png").unwrap();
+
+    let (width, height) = image.dimensions();
+
+    let mut buf: Vec<u8> = vec![];
+    image::png::PNGEncoder::new(&mut buf)
+        .encode(
+            &image.into_raw(),
+            width,
+            height,
+            ColorType::Gray(8),
+        ).expect("Error on encoding to png");
+    buf
 }
 
 async fn png(cx: tide::Context<()>) -> EndpointResult {
@@ -57,18 +67,18 @@ async fn png(cx: tide::Context<()>) -> EndpointResult {
     let value = query.get("value").unwrap();
     let size = query.get("size").unwrap_or(&"200".to_string()).parse::<u32>().unwrap();
 
-    let image = gen_png(value.to_string(), size);
+    let image = gen_png_buf(value.to_string(), size);
     let resp = http::Response::builder()
-        .header(http::header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
+        .header(http::header::CONTENT_TYPE, mime::PNG.as_ref())
+        .header(http::header::CONTENT_DISPOSITION, "inline")
         .status(http::StatusCode::OK)
-        .body("".into())
+        .body(image.into())
         .expect("Failed to build response");
     Ok(resp)
 }
 
 async fn svg(cx: tide::Context<()>) -> EndpointResult {
     let query = cx.url_query::<HashMap<String, String>>()?;
-
     let value = query.get("value").unwrap();
     let size = query.get("size").unwrap_or(&"200".to_string()).parse::<u32>().unwrap();
 

@@ -6,5 +6,5 @@ rust: nightly
 
 script:
   - rustc -vV
-  - cargo test --all -- --nocapture
+  - cargo test --all -- --nocapture -D warnings
   - cargo build
