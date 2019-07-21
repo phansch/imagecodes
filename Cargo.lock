@@ -437,7 +437,7 @@ dependencies = [
 
 [[package]]
 name = "imagecode"
-version = "0.1.4"
+version = "0.1.5-alpha.0"
 dependencies = [
  "env_logger 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "image 0.21.2 (registry+https://github.com/rust-lang/crates.io-index)",
