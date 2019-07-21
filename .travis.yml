@@ -2,7 +2,7 @@
 language: rust
 
 before_cache:
-  - rm -rfv target/debug/.fingerprint/mend-rs-*
+  - rm -rfv target/debug/.fingerprint/imagecode-*
   - rm -rfv target/debug/incremental/*
 
 cache: cargo
