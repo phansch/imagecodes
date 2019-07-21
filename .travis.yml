@@ -10,8 +10,8 @@ script:
 
 before_deploy:
   - mkdir $TRAVIS_BUILD_DIR/build_result
-  - cp $TRAVIS_BUILD_DIR/target/release/mend-rs $TRAVIS_BUILD_DIR/build_result/mend-rs-master
-  - cp $TRAVIS_BUILD_DIR/target/release/mend-rs $TRAVIS_BUILD_DIR/build_result/mend-rs-$TRAVIS_TAG
+  - cp $TRAVIS_BUILD_DIR/target/release/imagecode $TRAVIS_BUILD_DIR/build_result/imagecode-master
+  - cp $TRAVIS_BUILD_DIR/target/release/imagecode $TRAVIS_BUILD_DIR/build_result/imagecode-$TRAVIS_TAG
 
 deploy:
   provider: releases
