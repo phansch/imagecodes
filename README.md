@@ -4,10 +4,8 @@
 
 ## Releasing a new version
 
-Start: 7:45
-
-Use `cargo release`. This will do all the plumbing and upload the release
-artifact to the GitHub releases.
+Use `cargo release` from the `master` branch. This will do all the plumbing and
+upload the release artifact to the GitHub releases.
 
 The deployment script is then downloading the latest release and installs it on
 the server.
