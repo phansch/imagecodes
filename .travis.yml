@@ -10,14 +10,14 @@ script:
 
 before_deploy:
   - mkdir $TRAVIS_BUILD_DIR/build_result
-  - cp $TRAVIS_BUILD_DIR/target/release/imagecode $TRAVIS_BUILD_DIR/build_result/imagecode-master
-  - cp $TRAVIS_BUILD_DIR/target/release/imagecode $TRAVIS_BUILD_DIR/build_result/imagecode-$TRAVIS_TAG
+  - cp $TRAVIS_BUILD_DIR/target/release/imagecode $TRAVIS_BUILD_DIR/build_result/imagecodes-master
+  - cp $TRAVIS_BUILD_DIR/target/release/imagecode $TRAVIS_BUILD_DIR/build_result/imagecodes-$TRAVIS_TAG
 
 deploy:
   provider: releases
   api_key:
     secure: fHxqOBIixWB5wMsqvlnYTddD4+giyNeEGL8A5fwINRdMopJqLwU4lSidYIcgTAANYDEGHl6Me24hrKLuaLg17I+0C2uLF7RDdpd1S56L3N70X/leXfdx2JK2Yt8/px078ph3iP+xuSpMgyyKbVQtq4lJrwxu7uubodI7GvqaeQ85Rlp4hYDaeM/Z7NATL7hE8c7QivrXjEksSqiCn8gEmxFvS8An5oCNd34pEbIthrNBSASg5tkxfI5C0t2K3CuIrkQMkCNdTM5u3gcrOHr4+oDuIr9D7x01QihBe1muT2nMAImaGOvX6U3ERlY4vm5h7t2M0/A1G3LvnTmEXJ9woR5A9FVZlY0mPttOwssBjF5RhGJbJe8pxbwuMMYK02JymxFLCJyylrbnzEznH5wpwXvnpVXWiywGKbQSkKUpQcc0ARts5jvGHYJF9qBlzfx2nk+GfmP26WmjZ2GjhdkMIEyCbzQv1KxAVlWrfwJC/dA7pa3UAMrxtcQMVeAFmWovBvdvzBTD0GN35s394FgKzJo6nYgQDyiSQUkKDp+r8i9T3DmVsM8a4/7rLiAL6UCko2m6fvkAA/ge0YfMhE/AOn6R9sGD1MZbM6ZQ4oTC1/j+punTbZJDyKckowqIMQ6sFqGLTkFBgJm+uUKt9NGcktT0D05ccnMcDi19BA6TOQY=
-  file: "$TRAVIS_BUILD_DIR/build_result/mend-rs-$TRAVIS_TAG"
+  file: "$TRAVIS_BUILD_DIR/build_result/imagecodes-$TRAVIS_TAG"
   on:
     tag: true
     branch: master
