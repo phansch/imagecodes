@@ -1,6 +1,10 @@
 ---
 language: rust
 
+before_cache:
+  - rm -rfv target/debug/.fingerprint/mend-rs-*
+  - rm -rfv target/debug/incremental/*
+
 cache: cargo
 rust: nightly
 script:
@@ -20,6 +24,5 @@ deploy:
   file: "$TRAVIS_BUILD_DIR/build_result/imagecodes-$TRAVIS_TAG"
   skip_cleanup: true
   on:
-    tag: true
-    branch: master
+    tags: true
     repo: phansch/imagecodes
