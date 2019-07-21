@@ -20,4 +20,5 @@ deploy:
   file: "$TRAVIS_BUILD_DIR/build_result/mend-rs-$TRAVIS_TAG"
   on:
     tag: true
+    branch: master
     repo: phansch/imagecodes
