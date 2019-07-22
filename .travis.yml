@@ -14,8 +14,8 @@ script:
 
 before_deploy:
   - mkdir $TRAVIS_BUILD_DIR/build_result
-  - cp $TRAVIS_BUILD_DIR/target/release/imagecode $TRAVIS_BUILD_DIR/build_result/imagecodes-master
-  - cp $TRAVIS_BUILD_DIR/target/release/imagecode $TRAVIS_BUILD_DIR/build_result/imagecodes-$TRAVIS_TAG
+  - tar -cvzf $TRAVIS_BUILD_DIR/target/release/imagecode
+  - cp $TRAVIS_BUILD_DIR/target/release/imagecode.tar.gz $TRAVIS_BUILD_DIR/build_result/imagecodes-$TRAVIS_TAG
 
 deploy:
   provider: releases
