@@ -26,12 +26,14 @@ pub fn gen_png_buf(value: String, size: u32) -> Vec<u8> {
         .quiet_zone(false)
         .build();
 
+    let (width, height) = image.dimensions();
+
     let mut buf: Vec<u8> = vec![];
     image::png::PNGEncoder::new(&mut buf)
         .encode(
             &image.into_raw(),
-            size,
-            size,
+            width,
+            height,
             ColorType::Gray(8),
         ).expect("Error on encoding to png");
     buf
