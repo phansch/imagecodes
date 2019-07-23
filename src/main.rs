@@ -10,14 +10,6 @@ use tide::querystring::ContextExt;
 
 use imagecode::{gen_svg, gen_png_buf};
 
-// What would be needed to launch a product that has chances of success?
-// * API docs
-// * Nice website
-// * SSL
-// * Rate Limiting
-// * PNG generation
-// * UI
-
 fn parse_query(cx: tide::Context<()>) -> (String, u32) {
     let query = cx.url_query::<HashMap<String, String>>().unwrap();
     let value = query.get("value").unwrap();
