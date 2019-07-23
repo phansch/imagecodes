@@ -60,5 +60,5 @@ fn main() -> Result<(), std::io::Error> {
 
     app.at("/qr/svg/").get(svg);
     app.at("/qr/png/").get(png);
-    Ok(app.run("127.0.0.1:8000")?)
+    Ok(app.run("0.0.0.0:8000")?)
 }
