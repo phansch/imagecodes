@@ -23,3 +23,6 @@ tide = { git = "https://github.com/rustasync/tide.git", branch = "master" }
 http-service = { git = "https://github.com/rustasync/http-service", branch = "master" }
 http-service-hyper = { git = "https://github.com/rustasync/http-service", branch = "master" }
 http-service-mock = { git = "https://github.com/rustasync/http-service", branch = "master" }
+
+[profile.dev]
+opt-level = 2
