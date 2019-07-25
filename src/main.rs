@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use tide::{self, http, EndpointResult};
 use tide::querystring::ContextExt;
 
-use imagecode::{gen_svg, gen_png_buf};
+use imagecode::{gen_svg, gen_jpeg, gen_png_buf};
 
 #[cfg(test)]
 use http_service_mock::make_server;
@@ -50,6 +50,20 @@ async fn svg(cx: tide::Context<()>) -> EndpointResult {
     Ok(resp)
 }
 
+async fn jpeg(cx: tide::Context<()>) -> EndpointResult {
+    let (value, size) = parse_query(cx);
+
+    let image = gen_jpeg(value, size);
+
+    let resp = http::Response::builder()
+        .header(http::header::CONTENT_TYPE, mime::JPEG.as_ref())
+        .header(http::header::CONTENT_DISPOSITION, "inline")
+        .status(http::StatusCode::OK)
+        .body(image.into())
+        .expect("Failed to build response");
+    Ok(resp)
+}
+
 fn main() -> Result<(), std::io::Error> {
     env_logger::init();
 
@@ -59,6 +73,7 @@ fn main() -> Result<(), std::io::Error> {
 
     app.at("/qr/svg/").get(svg);
     app.at("/qr/png/").get(png);
+    app.at("/qr/jpeg/").get(jpeg);
     Ok(app.run("0.0.0.0:8000")?)
 }
 
@@ -78,6 +93,18 @@ fn png_route_happy_path_no_crash_test() {
 fn svg_route_happy_path_no_crash_test() {
     let mut app = tide::App::new();
     app.at("/").get(svg);
+    let mut server = make_server(app.into_http_service()).unwrap();
+
+    let req = http::Request::get(format!("/?value=foo&size=200")).body(Body::empty()).unwrap();
+    let res = server.simulate(req).unwrap();
+
+    block_on(res.into_body().into_vec()).unwrap();
+}
+
+#[test]
+fn jpeg_route_happy_path_no_crash_test() {
+    let mut app = tide::App::new();
+    app.at("/").get(jpeg);
     let mut server = make_server(app.into_http_service()).unwrap();
 
     let req = http::Request::get(format!("/?value=foo&size=200")).body(Body::empty()).unwrap();

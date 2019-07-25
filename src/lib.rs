@@ -21,6 +21,25 @@ pub fn gen_svg(value: String, size: u32) -> String {
         .build()
 }
 
+pub fn gen_jpeg(value: String, size: u32) -> Vec<u8> {
+    let code = QrCode::with_version(value, Version::Normal(3), EcLevel::L).unwrap();
+    let image = code.render::<Luma<u8>>()
+        .min_dimensions(size, size)
+        .quiet_zone(false)
+        .build();
+
+    let (width, height) = image.dimensions();
+    let mut buf: Vec<u8> = vec![];
+    image::jpeg::JPEGEncoder::new(&mut buf)
+        .encode(
+            &image.into_raw(),
+            width,
+            height,
+            ColorType::Gray(8),
+        ).expect("Error on encoding to jpeg");
+    buf
+}
+
 pub fn gen_png_buf(value: String, size: u32) -> Vec<u8> {
     let code = QrCode::with_version(value, Version::Normal(3), EcLevel::L).unwrap();
     let image = code.render::<Luma<u8>>()
