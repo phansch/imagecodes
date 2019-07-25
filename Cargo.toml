@@ -8,15 +8,20 @@ publish = false
 [dependencies]
 qrcode = "=0.10.0"
 image = "0.21.0"
-tide = { git = "https://github.com/rustasync/tide.git", branch = "master" }
-tide-log = { git = "https://github.com/rustasync/tide.git", branch = "master" }
 mime = "0.3.13"
 
 log = "0.4.6"
 env_logger = "0.6.2"
 
+# Webserver/Async stuff
+tide = { git = "https://github.com/rustasync/tide.git", branch = "master" }
+tide-log = { git = "https://github.com/rustasync/tide.git", branch = "master" }
+futures-preview = "0.3.0-alpha.17"
+
 [dev-dependencies]
 pretty_assertions = "0.6.1"
+http-service = { git = "https://github.com/rustasync/http-service", branch = "master" }
+http-service-mock = { git = "https://github.com/rustasync/http-service", branch = "master" }
 
 [patch.crates-io]
 tide = { git = "https://github.com/rustasync/tide.git", branch = "master" }

@@ -10,6 +10,13 @@ use tide::querystring::ContextExt;
 
 use imagecode::{gen_svg, gen_png_buf};
 
+#[cfg(test)]
+use http_service_mock::make_server;
+#[cfg(test)]
+use http_service::Body;
+#[cfg(test)]
+use futures::executor::block_on;
+
 fn parse_query(cx: tide::Context<()>) -> (String, u32) {
     let query = cx.url_query::<HashMap<String, String>>().unwrap();
     let value = query.get("value").unwrap();
@@ -53,4 +60,28 @@ fn main() -> Result<(), std::io::Error> {
     app.at("/qr/svg/").get(svg);
     app.at("/qr/png/").get(png);
     Ok(app.run("0.0.0.0:8000")?)
+}
+
+#[test]
+fn png_route_happy_path_no_crash_test() {
+    let mut app = tide::App::new();
+    app.at("/").get(png);
+    let mut server = make_server(app.into_http_service()).unwrap();
+
+    let req = http::Request::get(format!("/?value=foo&size=200")).body(Body::empty()).unwrap();
+    let res = server.simulate(req).unwrap();
+
+    block_on(res.into_body().into_vec()).unwrap();
+}
+
+#[test]
+fn svg_route_happy_path_no_crash_test() {
+    let mut app = tide::App::new();
+    app.at("/").get(svg);
+    let mut server = make_server(app.into_http_service()).unwrap();
+
+    let req = http::Request::get(format!("/?value=foo&size=200")).body(Body::empty()).unwrap();
+    let res = server.simulate(req).unwrap();
+
+    block_on(res.into_body().into_vec()).unwrap();
 }
