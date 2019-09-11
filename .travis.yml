@@ -12,6 +12,10 @@ script:
   - RUSTFLAGS="-D warnings" cargo test --all -- --nocapture
   - cargo build --release
 
+branches:
+  only:
+    - master
+
 before_deploy:
   - mkdir $TRAVIS_BUILD_DIR/build_result
   - (cd $TRAVIS_BUILD_DIR/target/release && tar -czvf imagecodes.tar.gz imagecode)
