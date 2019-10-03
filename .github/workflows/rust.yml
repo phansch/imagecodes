@@ -1,0 +1,53 @@
+---
+name: Rust
+'on':
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '00 01 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all -- --nocapture
+
+      - name: Build Release
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+
+      - name: Create tmp dir
+        if: startsWith(github.ref, 'refs/tags/')
+        run: mkdir /tmp/build_result
+      - name: Package Release
+        if: startsWith(github.ref, 'refs/tags/')
+        run: cd target/release && tar -czvf imagecodes.tar.gz imagecode
+      - name: Copy Package
+        if: startsWith(github.ref, 'refs/tags/')
+        run: cp target/release/imagecodes.tar.gz /tmp/build_result/imagecodes-$GITHUB_REF.tar.gz
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+        with:
+          files: /tmp/build_result/imagecodes*.tar.gz
