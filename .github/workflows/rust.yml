@@ -36,6 +36,8 @@ jobs:
           command: build
           args: --release
 
+      - name: Set GIT_TAG env
+        run: echo ::set-env name=GIT_TAG::$(echo ${GITHUB_REF:10})
       - name: Create tmp dir
         if: startsWith(github.ref, 'refs/tags/')
         run: mkdir /tmp/build_result
@@ -44,7 +46,7 @@ jobs:
         run: cd target/release && tar -czvf imagecodes.tar.gz imagecode
       - name: Copy Package
         if: startsWith(github.ref, 'refs/tags/')
-        run: cp target/release/imagecodes.tar.gz /tmp/build_result/imagecodes-$GITHUB_REF.tar.gz
+        run: cp target/release/imagecodes.tar.gz /tmp/build_result/imagecodes-$GIT_TAG.tar.gz
 
       - name: Publish release
         uses: softprops/action-gh-release@v1
