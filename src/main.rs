@@ -6,7 +6,7 @@
 use std::collections::HashMap;
 use tide::{self, http, Response};
 
-use imagecode::{gen_svg, gen_jpeg, gen_png_buf};
+use imagecodes::{gen_svg, gen_jpeg, gen_png_buf};
 use http_service::Body;
 
 #[cfg(test)]
