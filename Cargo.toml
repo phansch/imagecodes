@@ -7,7 +7,7 @@ publish = false
 
 [dependencies]
 qrcode = "=0.10.0"
-image = "0.21.0"
+image = "0.21.3"
 mime = "0.3.13"
 
 log = "0.4.6"
