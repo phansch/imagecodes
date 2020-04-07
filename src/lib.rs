@@ -34,7 +34,7 @@ pub fn gen_jpeg(value: String, size: u32) -> Vec<u8> {
             &image.into_raw(),
             width,
             height,
-            ColorType::Gray(8),
+            ColorType::L8,
         ).expect("Error on encoding to jpeg");
     buf
 }
@@ -54,7 +54,7 @@ pub fn gen_png_buf(value: String, size: u32) -> Vec<u8> {
             &image.into_raw(),
             width,
             height,
-            ColorType::Gray(8),
+            ColorType::L8,
         ).expect("Error on encoding to png");
     buf
 }
