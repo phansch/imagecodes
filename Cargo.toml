@@ -6,8 +6,8 @@ edition = "2018"
 publish = false
 
 [dependencies]
-qrcode = "=0.10.0"
-image = "0.21.0"
+qrcode = "0.12.0"
+image = "0.23.3"
 mime = "0.3.13"
 
 log = "0.4.6"
