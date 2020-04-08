@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use imagecodes::{gen_svg, gen_jpeg, gen_png_buf};
 use http_service::Body;
 use tide::{self, http, Response};
+use proptest::prelude::*;
 
 #[cfg(test)]
 use http_service_mock::make_server;
@@ -95,4 +96,20 @@ fn jpeg_route_happy_path_no_crash_test() {
 
     let mut buf = Vec::new();
     task::block_on(res.into_body().read_to_end(&mut buf)).unwrap();
+}
+
+proptest! {
+    #[test]
+    fn jpeg_route(s in "[a-zA-Z0-9]*") {
+        let mut app = tide::new();
+        app.at("/").get(jpeg);
+        let mut server = make_server(app.into_http_service()).unwrap();
+
+        let req = http::Request::get(format!("/?value={}&size=5", s)).body(Body::empty())?;
+        let res = server.simulate(req)?;
+        assert_eq!(res.headers().get("content-disposition").unwrap(), "inline");
+        assert_eq!(res.headers().get("content-type").unwrap(), "image/jpeg");
+        let mut buf = Vec::new();
+        task::block_on(res.into_body().read_to_end(&mut buf)).unwrap();
+    }
 }
