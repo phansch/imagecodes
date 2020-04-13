@@ -16,7 +16,7 @@ env_logger = "0.7.1"
 # Webserver/Async stuff
 tide = "0.6.0"
 futures = "*"
-http-service = "0.4.0"
+http-service = "0.5.0"
 
 [dependencies.async-std]
 version = "1.5.0"
