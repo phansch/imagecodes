@@ -51,6 +51,11 @@ pub async fn png(cx: tide::Request<()>) -> Response {
         .set_mime(mime::IMAGE_PNG)
 }
 
+pub async fn qr_type_not_supported(cx: tide::Request<()>) -> Response {
+    tide::Response::new(http::StatusCode::NOT_FOUND.into())
+        .body_string("This QR Type is not supported".to_string())
+}
+
 #[test]
 fn png_route_happy_path_no_crash_test() {
     let mut app = tide::new();

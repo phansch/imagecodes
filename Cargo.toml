@@ -17,6 +17,7 @@ env_logger = "0.7.1"
 tide = "0.6.0"
 futures = "*"
 http-service = "0.4.0"
+proptest = "0.9.4"
 
 [dependencies.async-std]
 version = "1.5.0"
@@ -25,7 +26,6 @@ features = ["attributes"]
 [dev-dependencies]
 pretty_assertions = "0.6.1"
 http-service-mock = "0.4.0"
-proptest = "0.9.4"
 
 [profile.dev]
 opt-level = 2
