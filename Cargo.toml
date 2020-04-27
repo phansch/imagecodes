@@ -15,7 +15,7 @@ env_logger = "0.7.1"
 proptest = "0.9.4"
 
 # Webserver/Async stuff
-tide = "0.7.0"
+tide = "0.8.0"
 http-types = "1.0.1"
 
 [dependencies.async-std]

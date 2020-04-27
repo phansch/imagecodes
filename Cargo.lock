@@ -52,6 +52,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-sse"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "async-std 1.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "http-types 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "memchr 2.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pin-project-lite 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "async-std"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -572,7 +584,7 @@ dependencies = [
  "pretty_assertions 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "proptest 0.9.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "qrcode 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "tide 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tide 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1251,16 +1263,17 @@ dependencies = [
 
 [[package]]
 name = "tide"
-version = "0.7.0"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
+ "async-sse 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "async-std 1.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "cookie 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-core 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "http-service 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "http-service-h1 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "http-types 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "kv-log-macro 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "mime 0.3.16 (registry+https://github.com/rust-lang/crates.io-index)",
  "route-recognizer 0.1.13 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.106 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1401,6 +1414,7 @@ dependencies = [
 "checksum anyhow 1.0.28 (registry+https://github.com/rust-lang/crates.io-index)" = "d9a60d744a80c30fcb657dfe2c1b22bcb3e814c1a1e3674f32bf5820b570fbff"
 "checksum async-attributes 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "efd3d156917d94862e779f356c5acae312b08fd3121e792c857d7928c8088423"
 "checksum async-h1 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "1b01e75ab67f7a7468eae7cd7d9fc2caf508a9671fb6df7d96ae716e6f94ff50"
+"checksum async-sse 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6de73294dd1287b32b10f4c884186446353048f183071dff38c1481f82c053b3"
 "checksum async-std 1.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "538ecb01eb64eecd772087e5b6f7540cbc917f047727339a472dafed2185b267"
 "checksum async-task 1.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "0ac2c016b079e771204030951c366db398864f5026f84a44dafb0ff20f02085d"
 "checksum atty 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)" = "d9b39be18770d11421cdb1b9947a45dd3f37e93092cbf377614828a319d5fee8"
@@ -1543,7 +1557,7 @@ dependencies = [
 "checksum tempfile 3.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7a6e24d9338a0a5be79593e2fa15a648add6138caa803e2d5bc782c371732ca9"
 "checksum termcolor 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "bb6bfa289a4d7c5766392812c0a1f4c1ba45afa1ad47803c11e1f407d846d75f"
 "checksum thread_local 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "d40c6d1b69745a6ec6fb1ca717914848da4b44ae29d9b3080cbee91d72a69b14"
-"checksum tide 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "dafdea72f0576f4344a263da5306aaeb67fb45a1be1655b15f3fa837720c9115"
+"checksum tide 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4550383fb8536883f99c2fa66f56e1fab3594dfa1724f6b2732bbc81f11d91ba"
 "checksum tiff 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "002351e428db1eb1d8656d4ca61947c3519ac3191e1c804d4600cd32093b77ad"
 "checksum time 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)" = "db8dcfca086c1143c9270ac42a2bbd8a7ee477b78ac8e45b19abfb0cbede4b6f"
 "checksum unicode-bidi 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "49f2bd0c6468a8230e1db229cff8029217cf623c767ea5d60bfbd42729ea54d5"
