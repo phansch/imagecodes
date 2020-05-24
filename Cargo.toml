@@ -1,6 +1,6 @@
 [package]
 name = "imagecodes"
-version = "0.4.2-alpha.0"
+version = "0.5.0"
 authors = ["Philipp Hansch <dev@phansch.net>"]
 edition = "2018"
 publish = false
