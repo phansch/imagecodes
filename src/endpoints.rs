@@ -1,24 +1,19 @@
 use std::collections::HashMap;
 use imagecodes::{gen_svg, gen_jpeg, gen_png_buf};
-use tide::Response;
-use http_types::headers::HeaderName;
-use http_types::StatusCode;
+use tide::{Response, StatusCode};
 use proptest::prelude::*;
-use std::str::FromStr;
 use async_std::io::Cursor;
 
 #[cfg(test)]
-use http_service_mock::make_server;
-#[cfg(test)]
-use async_std::task;
+use http_types::url::Url;
 #[cfg(test)]
 use async_std::io::ReadExt;
 #[cfg(test)]
 use http_types::headers;
+#[cfg(test)]
+use tide::Server;
 
-fn content_disposition() -> HeaderName {
-    HeaderName::from_str("content-disposition").unwrap()
-}
+static CONTENT_DISPOSITION: &str = "content-disposition";
 
 fn parse_query(cx: tide::Request<()>) -> (String, u32) {
     let query = cx.query::<HashMap<String, String>>().unwrap();
@@ -28,96 +23,95 @@ fn parse_query(cx: tide::Request<()>) -> (String, u32) {
 }
 
 
-pub async fn svg(cx: tide::Request<()>) -> Response {
+pub async fn svg(cx: tide::Request<()>) -> tide::Result {
     let (value, size) = parse_query(cx);
 
     let image = gen_svg(value, size);
 
-    tide::Response::new(StatusCode::Ok)
-        .set_header(content_disposition(), "inline")
+    Ok(Response::new(StatusCode::Ok)
+        .set_header(CONTENT_DISPOSITION, "inline")
         .body_string(image)
-        .set_mime(mime::IMAGE_SVG)
+        .set_mime(mime::IMAGE_SVG))
 }
 
-pub async fn jpeg(cx: tide::Request<()>) -> Response {
+pub async fn jpeg(cx: tide::Request<()>) -> tide::Result {
     let (value, size) = parse_query(cx);
 
     let image = gen_jpeg(value, size);
-    tide::Response::new(StatusCode::Ok)
-        .set_header(content_disposition(), "inline")
+    Ok(Response::new(StatusCode::Ok)
+        .set_header(CONTENT_DISPOSITION, "inline")
         .body(Cursor::new(image))
-        .set_mime(mime::IMAGE_JPEG)
+        .set_mime(mime::IMAGE_JPEG))
 }
 
-pub async fn png(cx: tide::Request<()>) -> Response {
+pub async fn png(cx: tide::Request<()>) -> tide::Result {
     let (value, size) = parse_query(cx);
 
     let image = gen_png_buf(value, size);
-    tide::Response::new(StatusCode::Ok)
-        .set_header(content_disposition(), "inline")
+    Ok(Response::new(StatusCode::Ok)
+        .set_header(CONTENT_DISPOSITION, "inline")
         .body(Cursor::new(image))
-        .set_mime(mime::IMAGE_PNG)
+        .set_mime(mime::IMAGE_PNG))
 }
 
-#[test]
-fn png_route_happy_path_no_crash_test() {
-    let mut app = tide::new();
+#[async_std::test]
+async fn png_route_happy_path_no_crash_test() {
+    let mut app = Server::new();
     app.at("/").get(png);
-    let mut server = make_server(app.into_http_service()).unwrap();
 
-    let req = http_types::Request::new(http_types::Method::Get, format!("https://example.com/?value=foo&size=5").parse().unwrap());
-    let mut res = server.simulate(req).unwrap();
+    let req = http_types::Request::new(http_types::Method::Get, Url::parse("https://example.com/?value=foo&size=5").unwrap());
+    let mut res: tide::http::Response = app.respond(req).await.unwrap();
 
     let mut buf = Vec::new();
 
-    assert_eq!(res.header(&content_disposition()).unwrap()[0], "inline");
-    assert_eq!(res.header(&headers::CONTENT_TYPE).unwrap()[0], "image/png");
-    task::block_on(res.read_to_end(&mut buf)).unwrap();
+    assert_eq!(res.header(CONTENT_DISPOSITION).unwrap()[0], "inline");
+    assert_eq!(res.header(headers::CONTENT_TYPE.as_str()).unwrap()[0], "image/png");
+    res.read_to_end(&mut buf);
 }
 
-#[test]
-fn svg_route_happy_path_no_crash_test() {
-    let mut app = tide::new();
+#[async_std::test]
+async fn svg_route_happy_path_no_crash_test() {
+    let mut app = Server::new();
     app.at("/").get(svg);
-    let mut server = make_server(app.into_http_service()).unwrap();
 
-    let req = http_types::Request::new(http_types::Method::Get, format!("https://example.com/?value=foo&size=5").parse().unwrap());
-    let mut res = server.simulate(req).unwrap();
+    let req = http_types::Request::new(http_types::Method::Get, Url::parse("https://example.com/?value=foo&size=5").unwrap());
+    let mut res: tide::http::Response = app.respond(req).await.unwrap();
 
-    assert_eq!(res.header(&content_disposition()).unwrap()[0], "inline");
-    assert_eq!(res.header(&headers::CONTENT_TYPE).unwrap()[0], "image/svg+xml");
+    assert_eq!(res.header(CONTENT_DISPOSITION).unwrap()[0], "inline");
+    assert_eq!(res.header(headers::CONTENT_TYPE.as_str()).unwrap()[0], "image/svg+xml");
     let mut buf = String::new();
-    task::block_on(res.read_to_string(&mut buf)).unwrap();
+    res.read_to_string(&mut buf);
 }
 
-#[test]
-fn jpeg_route_happy_path_no_crash_test() {
-    let mut app = tide::new();
+#[async_std::test]
+async fn jpeg_route_happy_path_no_crash_test() {
+    let mut app = Server::new();
     app.at("/").get(jpeg);
-    let mut server = make_server(app.into_http_service()).unwrap();
 
-    let req = http_types::Request::new(http_types::Method::Get, format!("https://example.com?value=foo&size=5").parse().unwrap());
-    let mut res = server.simulate(req).unwrap();
+    let req = http_types::Request::new(http_types::Method::Get, Url::parse("https://example.com?value=foo&size=5").unwrap());
+    let mut res: tide::http::Response = app.respond(req).await.unwrap();
 
-    assert_eq!(res.header(&content_disposition()).unwrap()[0], "inline");
-    assert_eq!(res.header(&headers::CONTENT_TYPE).unwrap()[0], "image/jpeg");
+    assert_eq!(res.header(CONTENT_DISPOSITION).unwrap()[0], "inline");
+    assert_eq!(res.header(headers::CONTENT_TYPE.as_str()).unwrap()[0], "image/jpeg");
 
     let mut buf = Vec::new();
-    task::block_on(res.read_to_end(&mut buf)).unwrap();
+    res.read_to_end(&mut buf);
 }
 
 proptest! {
     #[test]
+    #[allow(unused_must_use)]
     fn jpeg_route(s in "[a-zA-Z0-9]*") {
-        let mut app = tide::new();
+        let mut app = Server::new();
         app.at("/").get(jpeg);
-        let mut server = make_server(app.into_http_service()).unwrap();
 
-        let req = http_types::Request::new(http_types::Method::Get, format!("https://example.com?value={}&size=5", s).parse().unwrap());
-        let mut res = server.simulate(req)?;
-        assert_eq!(res.header(&content_disposition()).unwrap()[0], "inline");
-        assert_eq!(res.header(&headers::CONTENT_TYPE).unwrap()[0], "image/jpeg");
-        let mut buf = Vec::new();
-        task::block_on(res.read_to_end(&mut buf)).unwrap();
+        let req = http_types::Request::new(http_types::Method::Get, Url::parse(&format!("https://example.com?value={}&size=5", s)).unwrap());
+        async {
+            let mut res: tide::http::Response = app.respond(req).await.unwrap();
+            assert_eq!(res.header(CONTENT_DISPOSITION).unwrap()[0], "inline");
+            assert_eq!(res.header(headers::CONTENT_TYPE.as_str()).unwrap()[0], "image/jpeg");
+            let mut buf = Vec::new();
+            res.read_to_end(&mut buf);
+        };
     }
 }
