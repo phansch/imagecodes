@@ -2,7 +2,6 @@ use std::collections::HashMap;
 use imagecodes::{gen_svg, gen_jpeg, gen_png_buf};
 use tide::{Response, StatusCode};
 use proptest::prelude::*;
-use async_std::io::Cursor;
 
 #[cfg(test)]
 use http_types::url::Url;
@@ -28,30 +27,33 @@ pub async fn svg(cx: tide::Request<()>) -> tide::Result {
 
     let image = gen_svg(value, size);
 
-    Ok(Response::new(StatusCode::Ok)
-        .set_header(CONTENT_DISPOSITION, "inline")
-        .body_string(image)
-        .set_mime(mime::IMAGE_SVG))
+    let mut res = Response::new(StatusCode::Ok);
+    res.insert_header(CONTENT_DISPOSITION, "inline");
+    res.set_body(image);
+    res.set_content_type(tide::http::mime::SVG);
+    Ok(res)
 }
 
 pub async fn jpeg(cx: tide::Request<()>) -> tide::Result {
     let (value, size) = parse_query(cx);
 
     let image = gen_jpeg(value, size);
-    Ok(Response::new(StatusCode::Ok)
-        .set_header(CONTENT_DISPOSITION, "inline")
-        .body(Cursor::new(image))
-        .set_mime(mime::IMAGE_JPEG))
+    let mut res = Response::new(StatusCode::Ok);
+    res.insert_header(CONTENT_DISPOSITION, "inline");
+    res.set_body(image);
+    res.set_content_type(tide::http::mime::JPEG);
+    Ok(res)
 }
 
 pub async fn png(cx: tide::Request<()>) -> tide::Result {
     let (value, size) = parse_query(cx);
 
     let image = gen_png_buf(value, size);
-    Ok(Response::new(StatusCode::Ok)
-        .set_header(CONTENT_DISPOSITION, "inline")
-        .body(Cursor::new(image))
-        .set_mime(mime::IMAGE_PNG))
+    let mut res = Response::new(StatusCode::Ok);
+    res.insert_header(CONTENT_DISPOSITION, "inline");
+    res.set_body(image);
+    res.set_content_type(tide::http::mime::PNG);
+    Ok(res)
 }
 
 #[async_std::test]
