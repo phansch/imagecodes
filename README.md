@@ -1,6 +1,6 @@
 # imagecodes
 
-[![Build Status](https://travis-ci.com/phansch/imagecodes.svg?token=Px6VALkAQfGLfygptq2q&branch=master)](https://travis-ci.com/phansch/imagecodes)
+[![Rust](https://github.com/phansch/imagecodes/workflows/Rust/badge.svg)](https://github.com/phansch/imagecodes/actions?query=workflow%3ARust)
 
 ## Releasing a new version
 
