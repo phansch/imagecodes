@@ -24,6 +24,9 @@ jobs:
           toolchain: nightly
           override: true
 
+      - name: Install lld
+        run: sudo apt install -y lld
+
       - name: Run tests
         uses: actions-rs/cargo@v1
         with:
