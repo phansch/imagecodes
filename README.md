@@ -4,7 +4,7 @@
 
 ## Releasing a new version
 
-Use `cargo release` from the `master` branch. This will do all the plumbing and
+Use `cargo release` from the `main` branch. This will do all the plumbing and
 upload the release artifact to the GitHub releases.
 
 The deployment script is then downloading the latest release and installs it on
