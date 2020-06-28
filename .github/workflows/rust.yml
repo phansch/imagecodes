@@ -4,7 +4,7 @@ name: Rust
   pull_request:
   push:
     branches:
-      - master
+      - main
     tags:
       - v*
   schedule:
