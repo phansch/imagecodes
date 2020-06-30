@@ -58,6 +58,21 @@ pub mod qr {
     }
 }
 
+pub mod ean13 {
+    use super::*;
+
+    pub async fn png(req: tide::Request<()>) -> tide::Result {
+        let (value, size) = parse_query(req);
+
+        let image = imagecodes::ean13::gen_png_buf(value, size);
+        let mut res = Response::new(StatusCode::Ok);
+        res.insert_header(CONTENT_DISPOSITION, "inline");
+        res.set_body(image);
+        res.set_content_type(tide::http::mime::PNG);
+        Ok(res)
+    }
+}
+
 #[async_std::test]
 async fn png_route_happy_path_no_crash_test() {
     let mut app = Server::new();
