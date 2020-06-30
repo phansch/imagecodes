@@ -12,9 +12,9 @@ async fn main() -> Result<(), std::io::Error> {
 
     let mut app = tide::new();
 
-    app.at("/qr/svg").get(endpoints::svg);
-    app.at("/qr/png").get(endpoints::png);
-    app.at("/qr/jpeg").get(endpoints::jpeg);
+    app.at("/qr/svg").get(endpoints::qr::svg);
+    app.at("/qr/png").get(endpoints::qr::png);
+    app.at("/qr/jpeg").get(endpoints::qr::jpeg);
     log::info!("App is listening");
     Ok(app.listen("0.0.0.0:8000").await?)
 }
