@@ -8,6 +8,7 @@ use qrcode::render::svg;
 use image::{ColorType, Luma};
 #[cfg(test)]
 use pretty_assertions::assert_eq;
+pub mod ean13;
 
 pub fn gen_svg(value: String, size: u32) -> String {
     let code = QrCode::with_error_correction_level(value, EcLevel::L).unwrap();
