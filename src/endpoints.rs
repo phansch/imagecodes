@@ -14,6 +14,14 @@ use tide::Server;
 
 static CONTENT_DISPOSITION: &str = "content-disposition";
 
+pub async fn debug(_: tide::Request<()>) -> tide::Result {
+    let mut res = Response::new(StatusCode::Ok);
+    let body = format!("DEBUG INFO 🧑‍💻\n\nimagecodes version: {}\n\nthat's all for now 😸", env!("CARGO_PKG_VERSION"));
+    res.set_body(body);
+    res.set_content_type(tide::http::mime::PLAIN);
+    Ok(res)
+}
+
 fn parse_query(cx: tide::Request<()>) -> (String, u32) {
     let query = cx.query::<HashMap<String, String>>().unwrap();
     let value = query.get("value").unwrap();
