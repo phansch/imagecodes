@@ -15,3 +15,5 @@ the server.
 To deploy a new release on the server, run
 
     ./deploy
+
+To validate the deployment go to `<URL>/debug`
