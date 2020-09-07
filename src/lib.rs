@@ -30,7 +30,7 @@ pub fn gen_jpeg(value: String, size: u32) -> Vec<u8> {
 
     let (width, height) = image.dimensions();
     let mut buf: Vec<u8> = vec![];
-    image::jpeg::JPEGEncoder::new(&mut buf)
+    image::jpeg::JpegEncoder::new(&mut buf)
         .encode(
             &image.into_raw(),
             width,
@@ -50,7 +50,7 @@ pub fn gen_png_buf(value: String, size: u32) -> Vec<u8> {
     let (width, height) = image.dimensions();
 
     let mut buf: Vec<u8> = vec![];
-    image::png::PNGEncoder::new(&mut buf)
+    image::png::PngEncoder::new(&mut buf)
         .encode(
             &image.into_raw(),
             width,
