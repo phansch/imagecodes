@@ -26,3 +26,6 @@ pretty_assertions = "0.6.1"
 
 [profile.dev.package.difference]
 opt-level = 3
+
+[profile.release]
+strip = "symbols"
