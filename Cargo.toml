@@ -11,7 +11,7 @@ image = "0.23.7"
 barcoders = {version = "1.0.1", features = ["image", "svg"]}
 mime = "0.3.13"
 
-proptest = "0.10.0"
+proptest = "0.10.1"
 
 # Webserver/Async stuff
 tide = "0.13.0"
