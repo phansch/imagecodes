@@ -15,7 +15,7 @@ proptest = "0.10.0"
 
 # Webserver/Async stuff
 tide = "0.13.0"
-http-types = "2.3"
+http-types = "2.4"
 
 [dependencies.async-std]
 version = "1.6.2"
