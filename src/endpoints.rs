@@ -45,6 +45,10 @@ pub mod qr {
 
     pub async fn jpeg(cx: tide::Request<()>) -> tide::Result {
         let (value, size) = parse_query(cx);
+        if size > 1000 {
+            let res = Response::new(StatusCode::PayloadTooLarge);
+            return Ok(res);
+        }
 
         let image = gen_jpeg(value, size);
         let mut res = Response::new(StatusCode::Ok);
@@ -56,6 +60,10 @@ pub mod qr {
 
     pub async fn png(cx: tide::Request<()>) -> tide::Result {
         let (value, size) = parse_query(cx);
+        if size > 1000 {
+            let res = Response::new(StatusCode::PayloadTooLarge);
+            return Ok(res);
+        }
 
         let image = gen_png_buf(value, size);
         let mut res = Response::new(StatusCode::Ok);
@@ -123,6 +131,28 @@ async fn jpeg_route_happy_path_no_crash_test() {
 
     let mut buf = Vec::new();
     res.read_to_end(&mut buf);
+}
+
+#[async_std::test]
+async fn jpeg_route_size_too_big() {
+    let mut app = Server::new();
+    app.at("/").get(qr::jpeg);
+
+    let req = http_types::Request::new(http_types::Method::Get, Url::parse("https://example.com?value=foo&size=1001").unwrap());
+    let res: tide::http::Response = app.respond(req).await.unwrap();
+
+    assert_eq!(res.status(), StatusCode::PayloadTooLarge);
+}
+
+#[async_std::test]
+async fn png_route_size_too_big() {
+    let mut app = Server::new();
+    app.at("/").get(qr::png);
+
+    let req = http_types::Request::new(http_types::Method::Get, Url::parse("https://example.com?value=foo&size=1001").unwrap());
+    let res: tide::http::Response = app.respond(req).await.unwrap();
+
+    assert_eq!(res.status(), StatusCode::PayloadTooLarge);
 }
 
 proptest! {
