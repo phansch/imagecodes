@@ -14,7 +14,7 @@ mime = "0.3.13"
 proptest = "0.10.1"
 
 # Webserver/Async stuff
-tide = "0.13.0"
+tide = "0.15.1"
 http-types = "2.4"
 
 [dependencies.async-std]
