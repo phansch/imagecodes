@@ -8,7 +8,7 @@ publish = false
 [dependencies]
 qrcode = "0.12.0"
 image = "0.23.9"
-barcoders = {version = "1.0.1", features = ["image", "svg"]}
+barcoders = {version = "1.0.2", features = ["image", "svg"]}
 mime = "0.3.13"
 
 proptest = "0.10.1"
