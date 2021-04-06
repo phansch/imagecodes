@@ -22,7 +22,7 @@ version = "1.9.0"
 features = ["attributes"]
 
 [dev-dependencies]
-pretty_assertions = "0.6.1"
+pretty_assertions = "0.7.1"
 
 [profile.dev.package.difference]
 opt-level = 3
