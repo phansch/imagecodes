@@ -1,0 +1,18 @@
+version: 2
+updates:
+- package-ecosystem: cargo
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "16:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: pretty_assertions
+    versions:
+    - 0.7.1
+  - dependency-name: tide
+    versions:
+    - 0.15.1
+  - dependency-name: async-std
+    versions:
+    - 1.6.4
